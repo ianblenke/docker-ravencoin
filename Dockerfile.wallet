@@ -43,6 +43,8 @@ RUN apt-get install -y \
 
 RUN git clone https://github.com/RavenProject/Ravencoin /ravencoin \
  && cd /ravencoin \
+ && sed -i -e 's/DEFAULT_GENERATE = true/DEFAULT_GENERATE = false/g' ./src/rpc/mining.h \
+ && grep DEFAULT_GENERATE ./src/rpc/mining.h \
  && ./autogen.sh \
  && ./configure --enable-cxx --disable-shared --with-gui --with-pic CXXFLAGS="-fPIC -O2" CPPFLAGS="-fPIC -O2" \
  && make \
