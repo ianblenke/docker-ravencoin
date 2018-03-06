@@ -1,0 +1,29 @@
+version: '2.1'
+
+volumes:
+
+  ravencoin-data:
+    driver: local
+
+services:
+
+  ravencoin-wallet:
+    build:
+      context: .
+      dockerfile: Dockerfile.wallet
+    image: sofwerx/ravencoin-wallet
+    container_name: ravencoin-wallet
+    hostname: ravencoin-wallet
+    volumes:
+      - ravencoin-data:/root/.raven
+    ports:
+      - 8767:8767
+
+  ravencoin-gpu-ccminer:
+    build:
+      context: .
+      dockerfile: Dockerfile.gpu-ccminer
+    image: sofwerx/ravencoin-gpu-ccminer
+    container_name: ravencoin-gpu-ccminer
+    hostname: ravencoin-gpu-ccminer
+
