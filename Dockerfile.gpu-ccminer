@@ -12,7 +12,7 @@ RUN yum -y -q install gcc gcc-c++ make wget autoconf automake install openssl-de
 ENV BUILD_FOLDER=/minerbuild
 ENV APP_FOLDER=/app
 ENV APP_USER=minerbuilder
-ENV CCMINER_VERSION=master
+ENV CCMINER_VERSION=x16r
 
 RUN adduser $APP_USER \
  && mkdir $BUILD_FOLDER \
@@ -82,7 +82,7 @@ RUN mkdir $APP_FOLDER && \
     cp $CCMINER_FOLDER/ccminer $APP_FOLDER
 
 # Switch to a multistage build with the runtime image
-FROM nvidia/cuda:9.0-runtime-centos7
+FROM nvidia/cuda:9.1-runtime-centos7
 
 # Redefine the app user and folder - note app folder must be the same as the first stage
 ENV APP_FOLDER=/app
@@ -109,4 +109,6 @@ RUN ln -s $APP_FOLDER/ccminer /usr/local/bin/ccminer \
 RUN adduser $APP_USER
 USER $APP_USER
 
-CMD [ ccminer ]
+ADD run.sh /run.sh
+
+CMD /run.sh
