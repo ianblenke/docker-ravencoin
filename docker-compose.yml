@@ -1,5 +1,12 @@
 version: '2.1'
 
+x-logging:
+  &default-logging
+  options:
+    max-size: '12m'
+    max-file: '5'
+  driver: json-file
+
 volumes:
 
   ravencoin-data:
@@ -14,10 +21,12 @@ services:
     image: sofwerx/ravencoin-wallet
     container_name: ravencoin-wallet
     hostname: ravencoin-wallet
+    logging: *default-logging
     volumes:
       - ravencoin-data:/root/.raven
     ports:
-      - 8767:8767
+      - 127.0.0.1:8767:8767 # IPC - Keep protected!
+      - 8767:8767           # Ravencoin blockchain traffic
 
   ravencoin-gpu-ccminer:
     build:
@@ -26,3 +35,9 @@ services:
     image: sofwerx/ravencoin-gpu-ccminer
     container_name: ravencoin-gpu-ccminer
     hostname: ravencoin-gpu-ccminer
+    environment:
+      URL: ${URL}
+      USER: ${USER}
+      PASS: ${PASS}
+    logging: *default-logging
+
